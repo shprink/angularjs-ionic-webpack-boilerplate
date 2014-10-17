@@ -1,7 +1,7 @@
 var webpack = require('webpack');
 
 // Optimizing common code when different entry points. For now it is useless as we have only on entry point: './src/js/main.js'
-var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
+//var commonsPlugin = new webpack.optimize.CommonsChunkPlugin('common.js');
 
 module.exports = {
     entry: './src/js/main.js',
@@ -14,8 +14,15 @@ module.exports = {
         ]
     },
     resolve: {
-        // you can now require('file') instead of require('file.coffee')
-        extensions: ['', '.js', '.json']
+        extensions: ['', '.js', '.json'],
+        alias: {
+            'ionic': 'ionic/release/js/ionic',
+            'angular': 'ionic/release/js/angular/angular',
+            'ionic-angular': 'ionic/release/js/ionic-angular',
+            'angular-animate': 'ionic/release/js/angular/angular-animate',
+            'angular-sanitize': 'ionic/release/js/angular/angular-sanitize',
+            'angular-ui-router': 'ionic/release/js/angular-ui/angular-ui-router'
+        }
     },
-    plugins: [commonsPlugin]
+//    plugins: [commonsPlugin]
 };

@@ -1,15 +1,25 @@
 var gulp = require('gulp')
+        // gulp plugins
         , minifyHtml = require("gulp-minify-html")
+        , taskListing = require('gulp-task-listing')
         , argv = require('minimist')(process.argv.slice(2))
-        , webpack = require('webpack')
         , gulpif = require('gulp-if')
-        , WebpackDevServer = require("webpack-dev-server")
         , refresh = require('gulp-livereload')
+        , gutil = require("gulp-util")
+        // Webserver
         , livereload = require('connect-livereload')
         , livereloadport = 35729
-        , gulpWebpack = require('gulp-webpack');
-
-var IS_RELEASE_BUILD = (typeof argv.prod === 'undefined') ? false : true;
+        , express = require('express')
+        , serverport = 5000
+        // Webpack
+        , webpack = require('webpack')
+        , webpackGulp = require('gulp-webpack')
+        , webpackConfigPath = './webpack.config.js'
+        , webpackConfig = require(webpackConfigPath)
+        , webpackDevCompiler = webpack(webpackConfig)
+        // Variables
+        , destination = './www'
+        , isProd = (typeof argv.prod === 'undefined') ? false : true;
 
 gulp.task('default', function() {
     return gulp.src('src/entry.js')
@@ -19,38 +29,50 @@ gulp.task('default', function() {
 
 gulp.task('views', function() {
     gulp.src(['src/index.html'])
-            .pipe(gulpif(IS_RELEASE_BUILD, minifyHtml({
+            .pipe(gulpif(isProd, minifyHtml({
                 quotes: true,
                 empty: true
             })))
-            .pipe(gulp.dest('./www'));
+            .pipe(gulp.dest(destination));
+});
+
+gulp.task("webpack", function() {
+    if (isProd) {
+        gulp.start('webpack:build-prod');
+    } else {
+        gulp.start('webpack:build-dev');
+    }
+});
+gulp.task("webpack:build-dev", function(callback) {
+    webpackDevCompiler.run(function(err, stats) {
+        if (err) {
+            throw new gutil.PluginError("webpack:build-dev", err);
+        }
+        gutil.log("[webpack:build-dev]", stats.toString({
+            colors: true
+        }));
+        callback();
+    });
 });
 
 gulp.task('watch', function() {
-    var compiler = webpack(require('./webpack.config.js'));
+    var server = express();
 
-    var server = new WebpackDevServer(compiler, {
-        contentBase: "www",
-        hot: false,
-        quiet: false,
-        noInfo: false,
-        lazy: true,
-        watchDelay: 300,
-//        publicPath: "./src/",
-        headers: {"X-Custom-Header": "yes"},
-        stats: {colors: true}
-    });
-    
-    server.use(livereload({port: livereloadport}));
+    server.use(livereload({
+        port: livereloadport
+    }));
+    server.use(express.static(destination));
+    server.listen(8080, "localhost");
+
+    refresh.listen(livereloadport);
 
     gulp.watch(['./src/views/**/*.html', './src/index.html'], [
         'views'
     ]);
 
-//    gulp.watch(['lib/js/*.js', 'lib/js/**/*.js'], [
-//        //        'lint',
-//        'browserify'
-//    ]);
+    gulp.watch(['./src/js/**/*', webpackConfigPath], [
+        'webpack'
+    ]);
 
-    server.listen(8080, "localhost");
+    gulp.watch('./www/**').on('change', refresh.changed);
 });
