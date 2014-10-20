@@ -1,0 +1,19 @@
+{
+    "name": "angularjs-ionic-webpack-boilerplate",
+    "version": "0.0.0",
+    "authors": [
+        "shprink <julien.renaux@gmail.com>"
+    ],
+    "private": true,
+    "ignore": [
+        "**/.*",
+        "node_modules",
+        "bower_components",
+        "test",
+        "tests"
+    ],
+    "dependencies": {
+        "ionic": "driftyco/ionic-bower#1.0.0-beta.13",
+        "ionicons": "driftyco/ionicons#1.5.2"
+    }
+}

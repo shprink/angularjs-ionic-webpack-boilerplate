@@ -66,11 +66,11 @@ gulp.task('watch', function() {
 
     refresh.listen(livereloadport);
 
-    gulp.watch(['./src/views/**/*.html', './src/index.html'], [
-        'views'
-    ]);
+//    gulp.watch(['./src/views/**/*.html', './src/index.html'], [
+//        'views'
+//    ]);
 
-    gulp.watch(['./src/js/**/*', webpackConfigPath], [
+    gulp.watch(['./src/js/**/*', webpackConfigPath, './src/index.html'], [
         'webpack'
     ]);
 

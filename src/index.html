@@ -1,12 +1,12 @@
 <html>
     <head>
-        <title>sphrink/angularjs-ionic-webpack-boilerplate</title>
+        <title>{%=o.htmlWebpackPlugin.options.title %}</title>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width">
         <link href="css/bundle.css" rel="stylesheet">
-        <script type="text/javascript" src="js/bundle.js"></script>
     </head>
     <body ng-app="boilerplate">
-        <div>TODO write content 38</div>
+        <div id="master" ui-view="scaffolding"></div>
+        <script type="text/javascript" src="js/bundle.js"></script>
     </body>
 </html>

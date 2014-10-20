@@ -30,5 +30,4 @@ node_modules
 /nbproject
 /www
 /dist
-
-
+bower_components/
