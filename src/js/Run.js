@@ -1,14 +1,9 @@
 'use strict';
 
-var Run = function($rootScope, $window, $log) {
-    $log.log('Running');
+module.exports = function($rootScope, $window, $log, $ionicSideMenuDelegate) {
+    $log.debug('Running');
 
     $rootScope.toggleLeft = function() {
-
+        $ionicSideMenuDelegate.toggleLeft();
     };
-
-    // Injector
-    $window.injector = angular.injector(['ng']);
 };
-
-module.exports = Run;

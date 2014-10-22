@@ -1,5 +1,7 @@
 'use strict';
 
+require('angular-ui-router');
+
 var RouterConfig = function($stateProvider, $urlRouterProvider) {
     $stateProvider
             .state('root', {
@@ -7,13 +9,13 @@ var RouterConfig = function($stateProvider, $urlRouterProvider) {
                 abstract: true,
                 views: {
                     "scaffolding": {
-                        templateUrl: 'views/scaffolding.html'
+                        template: require('views/scaffolding.html')
                     },
                     "menu@root": {
-                        templateUrl: 'views/menu.html'
+                        template: require('views/menu.html')
                     },
                     "header@root": {
-                        templateUrl: 'views/header.html'
+                        template: require('views/header.html')
                     }
                 }
             })
@@ -21,17 +23,17 @@ var RouterConfig = function($stateProvider, $urlRouterProvider) {
                 url: "/home",
                 views: {
                     "content": {
-                        templateUrl: 'views/Home/content.html',
+                        template: require('views/Home/content.html'),
                         controller: 'HomeCtrl'
                     }
                 }
             })
-            .state('root.admin', {
-                url: "/admin",
+            .state('root.profile', {
+                url: "/profile",
                 views: {
                     "content": {
-                        templateUrl: 'views/Admin/content.html',
-                        controller: 'AdminCtrl'
+                        template: require('views/Profile/content.html'),
+                        controller: 'ProfileCtrl'
                     }
                 }
             });

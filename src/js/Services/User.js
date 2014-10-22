@@ -2,12 +2,7 @@
 
 var UserService = function($rootScope, $log) {
     $log.log('UserService');
-    
-    
-    this.update = function(value){
-        $log.log(value, 'value');
-    };
-    
+
     var list = [];
 
     var strings = [
@@ -29,7 +24,7 @@ var UserService = function($rootScope, $log) {
         }
     };
 
-    
+
     var generateCount = 50000;
     var generateData = function() {
         var names = [], data = [];
@@ -44,7 +39,7 @@ var UserService = function($rootScope, $log) {
                 divider = null;
             }
             data.push({
-                index: i,
+                id: i,
                 name: name,
                 divider: divider,
                 details: strings[i % 3],
@@ -53,15 +48,18 @@ var UserService = function($rootScope, $log) {
         }
         return data;
     };
-    this.getCount = function() {
-        return list.length;
-    },
-    this.getList = function() {
+    this.getFriends = function() {
         if (this.getCount()) {
             return list;
         }
         list = generateData();
         return list;
+    };
+    this.getCurrent = function() {
+        return {
+            id: 0,
+            name: 'Brandon Walsh'
+        };
     };
 };
 

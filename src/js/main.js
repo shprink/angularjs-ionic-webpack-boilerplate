@@ -1,30 +1,23 @@
 'use strict';
 
-var angular = require('angular');
+global.__webpack_public_path__ = '/';
 
-console.log(angular, 'angular');
+var angular = require('angular');
 
 require('ionic');
 require('ionic-angular');
-require('angular-ui-router');
 require('angular-animate');
 require('angular-sanitize');
 
 var app = angular.module('boilerplate', [
-    'ui.router'
+    'ionic',
+    'ui.router',
+    require('js/Controllers/Controllers').name,
+    require('js/Services/Services').name,
+    require('js/Config/Config').name
 ]);
 
-// controllers
-app.controller('HomeCtrl', ['$scope', '$log', require('./Controllers/Home')]);
-app.controller('AdminCtrl', ['$scope', '$log', 'UserService', require('./Controllers/Admin')]);
-
-// Services
-app.service('UserService', ['$rootScope', '$log', require('./Services/User')]);
-
-// Config
-app.config(['$stateProvider', '$urlRouterProvider', require('./Config/Router')]);
-
 // Run
-app.run(['$rootScope', '$window', '$log', require('./Run')]);
+app.run(['$rootScope', '$window', '$log', '$ionicSideMenuDelegate', require('./Run')]);
 
 module.exports = app;

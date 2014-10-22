@@ -2,11 +2,11 @@
     <head>
         <title>{%=o.htmlWebpackPlugin.options.title %}</title>
         <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width">
-        <link href="css/bundle.css" rel="stylesheet">
+        <meta name="viewport" content="initial-scale=1, maximum-scale=1, user-scalable=no, width=device-width">
     </head>
     <body ng-app="boilerplate">
         <div id="master" ui-view="scaffolding"></div>
-        <script type="text/javascript" src="js/bundle.js"></script>
+        {% for (var chunk in o.htmlWebpackPlugin.assets) { %}<script src="{%=o.htmlWebpackPlugin.assets[chunk]%}"></script>{% } %}
+        <!-- {%= o.htmlWebpackPlugin.options.pkg.name + ' v' + o.htmlWebpackPlugin.options.pkg.version + ' built on ' + new Date() %} -->
     </body>
 </html>

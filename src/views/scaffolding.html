@@ -1,0 +1,12 @@
+<ion-side-menus delegate-handle="main">
+    <!-- Center content -->
+    <ion-side-menu-content >
+        <div ui-view="header" ng-tranclude></div>
+        <div ui-view="content" ng-tranclude></div>
+    </ion-side-menu-content>
+
+    <!-- Left menu -->
+    <ion-side-menu side="left" ui-view="menu" expose-aside-when="large" ng-controller="MenuCtrl">
+
+    </ion-side-menu>
+</ion-side-menus>

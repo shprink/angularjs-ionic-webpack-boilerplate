@@ -6,17 +6,16 @@ var gulp = require('gulp')
         , gulpif = require('gulp-if')
         , refresh = require('gulp-livereload')
         , gutil = require("gulp-util")
-        // Webserver
-        , livereload = require('connect-livereload')
-        , livereloadport = 35729
-        , express = require('express')
-        , serverport = 5000
+        , del = require('del')
+        , path = require('path')
         // Webpack
         , webpack = require('webpack')
+        , open = require('open')
         , webpackGulp = require('gulp-webpack')
         , webpackConfigPath = './webpack.config.js'
         , webpackConfig = require(webpackConfigPath)
         , webpackDevCompiler = webpack(webpackConfig)
+        , webpackDevServer = require('webpack-dev-server')
         // Variables
         , destination = './www'
         , isProd = (typeof argv.prod === 'undefined') ? false : true;
@@ -55,24 +54,27 @@ gulp.task("webpack:build-dev", function(callback) {
     });
 });
 
-gulp.task('watch', function() {
-    var server = express();
+gulp.task('webpack-dev-server', function(callback) {
+    new webpackDevServer(webpackDevCompiler, {
+//        contentBase: path.join(__dirname, 'www'),
+//        publicPath : '/',
+        stats: {
+            colors: true
+        }
 
-    server.use(livereload({
-        port: livereloadport
-    }));
-    server.use(express.static(destination));
-    server.listen(8080, "localhost");
+    }).listen(8082, 'localhost', function(err) {
+        if (err) {
+            throw new gutil.PluginError('webpack-dev-server', err);
+        }
 
-    refresh.listen(livereloadport);
-
-//    gulp.watch(['./src/views/**/*.html', './src/index.html'], [
-//        'views'
-//    ]);
-
-    gulp.watch(['./src/js/**/*', webpackConfigPath, './src/index.html'], [
-        'webpack'
-    ]);
-
-    gulp.watch('./www/**').on('change', refresh.changed);
+        var startUrl = 'http://localhost:8082/webpack-dev-server/index.html';
+        open(startUrl);
+        gutil.log('[webpack-dev-server]', startUrl);
+    });
 });
+
+gulp.task('clean:all', function (cb) {
+  del(destination + '/*', cb);
+});
+
+gulp.task('watch', ['webpack-dev-server']);
